@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+@import './variables.css';
+@import './theme.css';
+@import './utilities.css';
+@import './animations.css';
+@import './responsive.css';
+
+.swal2-popup { font-family: var(--vt-font-sans) !important; }

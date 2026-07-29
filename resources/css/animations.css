@@ -1,1 +1,7 @@
-/* Animations */
+@keyframes vtFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vtSlideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes vtPulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+.vt-animate-fade-in { animation: vtFadeIn var(--vt-transition-normal) forwards; }
+.vt-animate-slide-up { animation: vtSlideUp var(--vt-transition-normal) forwards; }
+.vt-animate-pulse { animation: vtPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }

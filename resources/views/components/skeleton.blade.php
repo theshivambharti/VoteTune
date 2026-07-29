@@ -1,0 +1,2 @@
+@props(['type' => 'text', 'width' => '100%', 'height' => '20px', 'circle' => false])
+<div class="vt-skeleton vt-animate-pulse vt-bg-surface vt-border" style="width: {{ $width }}; height: {{ $height }}; border-radius: {{ $circle ? '50%' : 'var(--vt-radius-sm)' }};" {!! $attributes !!}></div>

@@ -1,3 +1,59 @@
-/* CSS Variables */
 :root {
+    /* Base Colors - HSL */
+    --h-primary: 250; --s-primary: 60%; --l-primary: 50%;
+    --vt-primary: hsl(var(--h-primary), var(--s-primary), var(--l-primary));
+    --vt-primary-hover: hsl(var(--h-primary), var(--s-primary), 40%);
+    
+    --vt-secondary: #64748b;
+    --vt-success: #10b981;
+    --vt-danger: #ef4444;
+    --vt-warning: #f59e0b;
+    --vt-info: #3b82f6;
+
+    /* Typography */
+    --vt-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --vt-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Spacing */
+    --vt-space-xs: 0.25rem;
+    --vt-space-sm: 0.5rem;
+    --vt-space-md: 1rem;
+    --vt-space-lg: 1.5rem;
+    --vt-space-xl: 2rem;
+
+    /* Radius */
+    --vt-radius-sm: 0.25rem;
+    --vt-radius-md: 0.5rem;
+    --vt-radius-lg: 1rem;
+    --vt-radius-xl: 1.5rem;
+    --vt-radius-full: 9999px;
+
+    /* Shadows */
+    --vt-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --vt-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --vt-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+    /* Transitions */
+    --vt-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --vt-transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-bs-theme="light"] {
+    --vt-bg: #f8fafc;
+    --vt-surface: #ffffff;
+    --vt-text-primary: #0f172a;
+    --vt-text-secondary: #475569;
+    --vt-border: #e2e8f0;
+}
+
+[data-bs-theme="dark"] {
+    --vt-bg: #0f172a;
+    --vt-surface: #1e293b;
+    --vt-text-primary: #f8fafc;
+    --vt-text-secondary: #94a3b8;
+    --vt-border: #334155;
+    
+    --vt-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --vt-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --vt-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
 }

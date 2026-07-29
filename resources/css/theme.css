@@ -1,1 +1,48 @@
-/* Theme Styles */
+body {
+    background-color: var(--vt-bg);
+    color: var(--vt-text-primary);
+    font-family: var(--vt-font-sans);
+    transition: background-color var(--vt-transition-normal), color var(--vt-transition-normal);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Scale */
+.vt-display { font-size: 3.5rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.vt-h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.vt-h2 { font-size: 2rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+.vt-h3 { font-size: 1.5rem; font-weight: 600; line-height: 1.4; }
+.vt-h4 { font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
+.vt-body-large { font-size: 1.125rem; line-height: 1.6; }
+.vt-body { font-size: 1rem; line-height: 1.6; }
+.vt-body-small { font-size: 0.875rem; line-height: 1.5; }
+.vt-caption { font-size: 0.75rem; line-height: 1.4; color: var(--vt-text-secondary); }
+
+/* Overriding Bootstrap Variables globally */
+:root {
+    --bs-primary: var(--vt-primary);
+    --bs-success: var(--vt-success);
+    --bs-danger: var(--vt-danger);
+    --bs-warning: var(--vt-warning);
+    --bs-info: var(--vt-info);
+    --bs-secondary: var(--vt-secondary);
+    --bs-body-bg: var(--vt-bg);
+    --bs-body-color: var(--vt-text-primary);
+    --bs-font-sans-serif: var(--vt-font-sans);
+    --bs-border-color: var(--vt-border);
+    --bs-border-radius: var(--vt-radius-md);
+    --bs-box-shadow: var(--vt-shadow-sm);
+}
+
+.table {
+    --bs-table-color: var(--vt-text-primary);
+    --bs-table-bg: var(--vt-surface);
+    --bs-table-border-color: var(--vt-border);
+    --bs-table-striped-color: var(--vt-text-primary);
+    --bs-table-striped-bg: rgba(0,0,0,0.02);
+    --bs-table-hover-color: var(--vt-text-primary);
+    --bs-table-hover-bg: rgba(0,0,0,0.04);
+}
+[data-bs-theme="dark"] .table {
+    --bs-table-striped-bg: rgba(255,255,255,0.02);
+    --bs-table-hover-bg: rgba(255,255,255,0.04);
+}

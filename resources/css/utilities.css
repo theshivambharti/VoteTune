@@ -1,1 +1,36 @@
-/* Utility Classes */
+.vt-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+[data-bs-theme="dark"] .vt-glass {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.vt-text-primary { color: var(--vt-primary) !important; }
+.vt-text-secondary { color: var(--vt-text-secondary) !important; }
+
+.vt-bg-surface { background-color: var(--vt-surface) !important; }
+.vt-border { border: 1px solid var(--vt-border) !important; }
+
+.vt-radius-sm { border-radius: var(--vt-radius-sm) !important; }
+.vt-radius-md { border-radius: var(--vt-radius-md) !important; }
+.vt-radius-lg { border-radius: var(--vt-radius-lg) !important; }
+.vt-radius-full { border-radius: var(--vt-radius-full) !important; }
+
+/* Focus */
+.vt-focus-ring:focus-visible {
+    outline: 2px solid var(--vt-primary);
+    outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--vt-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--vt-text-secondary); }
+
+/* Selection */
+::selection { background: var(--vt-primary); color: white; }
