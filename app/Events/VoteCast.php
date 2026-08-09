@@ -18,6 +18,11 @@ class VoteCast implements ShouldBroadcast
     public $roomId;
     public $songId;
     public $voteCount;
+    
+    /**
+     * Dispatch the event only after the database transaction commits.
+     */
+    public $afterCommit = true;
 
     /**
      * Create a new event instance.
@@ -26,8 +31,11 @@ class VoteCast implements ShouldBroadcast
     {
         $this->roomId = $roomId;
         $this->songId = $songId;
-        // We query the count to send to all clients
-        $this->voteCount = \App\Models\Vote::where('song_id', $songId)->count();
+        
+        // Harden vote count: explicitly scope by both room and song
+        $this->voteCount = \App\Models\Vote::where('room_id', $roomId)
+            ->where('song_id', $songId)
+            ->count();
     }
 
     /**

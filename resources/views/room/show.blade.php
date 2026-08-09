@@ -92,7 +92,7 @@
 
         try {
             const res = await fetch(`/r/${roomId}/song/${songId}/vote`, {
-                method: 'POST',
+                method: isVoted ? 'DELETE' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',

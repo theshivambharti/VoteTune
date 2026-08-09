@@ -30,7 +30,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Public Room Routes
 Route::get('/r/{code}', [\App\Http\Controllers\RoomController::class, 'showPublic'])->name('room.show');
-Route::post('/r/{room}/song/{song}/vote', [\App\Http\Controllers\VoteController::class, 'toggleVote'])->name('room.vote');
+
+// Rate Limit: 30 requests per minute to prevent rapid automated abuse while allowing normal voting
+Route::post('/r/{room}/song/{song}/vote', [\App\Http\Controllers\VoteController::class, 'store'])
+    ->middleware('throttle:30,1')
+    ->name('room.vote.store');
+    
+Route::delete('/r/{room}/song/{song}/vote', [\App\Http\Controllers\VoteController::class, 'destroy'])
+    ->middleware('throttle:30,1')
+    ->name('room.vote.destroy');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin/settings.php';

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Song;
 use App\Services\VoteService;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreVoteRequest;
 use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
@@ -18,9 +18,9 @@ class VoteController extends Controller
     }
 
     /**
-     * Cast or remove a vote.
+     * Cast a vote.
      */
-    public function toggleVote(Request $request, Room $room, Song $song)
+    public function store(StoreVoteRequest $request, Room $room, Song $song)
     {
         if ($room->status !== 'active') {
             return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
@@ -29,37 +29,46 @@ class VoteController extends Controller
         $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
         
         if (!$voterIdentifier) {
-            // Should have been set by showPublic, but just in case
             $voterIdentifier = 'guest_' . \Illuminate\Support\Str::uuid()->toString();
         }
 
         $userId = Auth::check() ? Auth::id() : null;
         $guestSessionId = Auth::check() ? null : $voterIdentifier;
 
-        // Check if vote exists
-        $hasVoted = \App\Models\Vote::where('room_id', $room->id)
-            ->where('song_id', $song->id)
-            ->where('voter_identifier', $voterIdentifier)
-            ->exists();
-
         try {
-            if ($hasVoted) {
-                // Unvote
-                $this->voteService->removeVote($room, $song, $voterIdentifier);
-                $message = 'Vote removed.';
-                $voted = false;
-            } else {
-                // Vote
-                $this->voteService->castVote($room, $song, $voterIdentifier, $userId, $guestSessionId);
-                $message = 'Vote cast.';
-                $voted = true;
-            }
-
+            $this->voteService->castVote($room, $song, $voterIdentifier, $userId, $guestSessionId);
             return response()->json([
                 'success' => true,
-                'message' => $message,
-                'voted' => $voted,
+                'message' => 'Vote cast.',
+                'voted' => true,
             ])->cookie('voter_id', $voterIdentifier, 60 * 24 * 30);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
+     * Remove a vote.
+     */
+    public function destroy(Request $request, Room $room, Song $song)
+    {
+        if ($room->status !== 'active') {
+            return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
+        }
+
+        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
+
+        if (!$voterIdentifier) {
+            return response()->json(['success' => false, 'message' => 'No vote found.'], 404);
+        }
+
+        try {
+            $this->voteService->removeVote($room, $song, $voterIdentifier);
+            return response()->json([
+                'success' => true,
+                'message' => 'Vote removed.',
+                'voted' => false,
+            ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
