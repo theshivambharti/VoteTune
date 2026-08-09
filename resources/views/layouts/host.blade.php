@@ -9,9 +9,12 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     @include('partials.navbar')
-    <main class="flex-grow-1 p-4 w-100 overflow-hidden">
-        @yield('content')
-    </main>
+    <div class="d-flex flex-grow-1">
+        @include('partials.host-sidebar')
+        <main class="flex-grow-1 p-4 w-100 overflow-hidden bg-body-tertiary">
+            @yield('content')
+        </main>
+    </div>
     @include('partials.footer')
     <x-flash-message />
     @stack('scripts')

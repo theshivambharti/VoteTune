@@ -8,12 +8,13 @@ class DashboardController extends BaseController
     public function index(Request $request)
     {
         $user = $request->user();
+        
         if ($user->hasRole('Administrator')) {
-            return view('admin.dashboard');
+            return redirect()->route('admin.dashboard');
         } elseif ($user->hasRole('Host')) {
-            return view('host.dashboard');
+            return redirect()->route('host.dashboard');
         }
         
-        return view('user.dashboard');
+        return redirect()->route('user.dashboard');
     }
 }

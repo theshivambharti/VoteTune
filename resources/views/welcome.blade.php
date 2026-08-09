@@ -4,148 +4,169 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>VoteTune - Make Every Vote Count</title>
+    <title>VoteTune - The Modern Live Voting Experience</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .hero-section {
-            padding: 6rem 0 4rem;
-            background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.1) 0%, transparent 100%);
+            position: relative;
+            padding: 8rem 0 6rem;
+            overflow: hidden;
+            background-color: #000;
         }
-        .feature-icon-wrapper {
-            width: 64px;
-            height: 64px;
+        .hero-bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.25) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glass-mockup {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(var(--bs-primary-rgb), 0.1);
-            color: var(--bs-primary);
-            margin-bottom: 1.5rem;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #a5b4fc, #818cf8, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100 vt-bg">
+<body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary border-bottom py-3 shadow-sm">
+    <nav class="navbar navbar-expand-lg fixed-top bg-dark border-bottom border-dark" style="background: rgba(0,0,0,0.8) !important; backdrop-filter: blur(10px);">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 vt-text-primary fw-bold fs-4" href="/">
-                <i data-lucide="music-4" style="width: 28px; height: 28px;"></i> VoteTune
+            <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-bold fs-4" href="/">
+                <i data-lucide="music-4" class="text-primary" style="width: 28px; height: 28px;"></i> VoteTune
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i data-lucide="menu"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3" href="#trust">Security</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center gap-3">
-                    @include('partials.theme-switcher')
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="btn vt-btn vt-btn-primary px-4">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary px-4">Log in</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn vt-btn vt-btn-primary px-4">Sign up</a>
-                        @endif
-                    @endauth
-                </div>
+            <div class="d-flex align-items-center gap-3 ms-auto">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="btn vt-btn vt-btn-primary px-4 rounded-pill">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-link text-white text-decoration-none px-3">Log in</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn vt-btn vt-btn-primary px-4 rounded-pill shadow-sm">Get Started</a>
+                    @endif
+                @endauth
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section text-center px-3">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 col-xl-7">
-                    <h1 class="display-4 fw-bold mb-4">Make Every Vote Count.</h1>
-                    <p class="lead text-muted mb-5 px-md-5">
-                        Create, share, and manage modern digital polls with confidence. VoteTune brings real-time interactions to your audience, securely and beautifully.
+    <section class="hero-section text-center text-white flex-grow-1 d-flex align-items-center">
+        <div class="hero-bg-glow"></div>
+        <div class="container position-relative z-1 mt-5">
+            <div class="row justify-content-center align-items-center g-5 text-start">
+                
+                <div class="col-lg-6 order-2 order-lg-1">
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill glass-card text-white-50 mb-4 small fw-semibold letter-spacing-1">
+                        <span class="badge bg-primary rounded-pill">New</span> Real-time Laravel Reverb Support
+                    </div>
+                    <h1 class="display-3 fw-bolder mb-4 lh-1 text-white">
+                        Let the crowd <br>
+                        <span class="text-gradient">control the vibe.</span>
+                    </h1>
+                    <p class="fs-5 text-white-50 mb-5 pe-md-5">
+                        Create rooms, manage the queue, and let your audience vote in real-time. The ultimate interactive polling platform built for modern events.
                     </p>
-                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="btn vt-btn vt-btn-primary btn-lg px-5">Go to Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="btn vt-btn vt-btn-primary btn-lg px-5">Get Started</a>
-                        @endauth
-                        <a href="#features" class="btn btn-outline-secondary btn-lg px-5">Learn More</a>
+                    <div class="d-flex flex-column flex-sm-row gap-3">
+                        <a href="{{ route('register') }}" class="btn vt-btn vt-btn-primary btn-lg px-5 rounded-pill shadow-lg d-flex justify-content-center align-items-center gap-2">
+                            Start for free <i data-lucide="arrow-right" style="width: 20px;"></i>
+                        </a>
+                        <a href="#features" class="btn btn-outline-light btn-lg px-5 rounded-pill glass-card border-white-50">
+                            See how it works
+                        </a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-5 bg-body-tertiary">
-        <div class="container py-5">
-            <div class="text-center mb-5 pb-3">
-                <h2 class="vt-h2">Designed for Modern Polling</h2>
-                <p class="text-muted">Everything you need to host real-time votes.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <x-card class="h-100 border-0 shadow-sm hover-lift transition-all">
-                        <div class="card-body p-4">
-                            <div class="feature-icon-wrapper">
-                                <i data-lucide="zap" style="width: 32px; height: 32px;"></i>
+                <div class="col-lg-6 order-1 order-lg-2">
+                    <div class="glass-mockup p-4 floating-element position-relative">
+                        <!-- Decorative status bar -->
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 8px; height: 8px;"></span>
+                                <span class="text-white-50 small fw-bold letter-spacing-1 text-uppercase">Live Room: FRIDAY</span>
                             </div>
-                            <h4 class="vt-h4 mb-3">Real-time Updates</h4>
-                            <p class="text-muted mb-0">Powered by Laravel Reverb, watch the votes roll in live without ever refreshing the page.</p>
+                            <div class="text-white-50 small">1,204 connected</div>
                         </div>
-                    </x-card>
-                </div>
-                <div class="col-md-4">
-                    <x-card class="h-100 border-0 shadow-sm hover-lift transition-all">
-                        <div class="card-body p-4">
-                            <div class="feature-icon-wrapper">
-                                <i data-lucide="shield-check" style="width: 32px; height: 32px;"></i>
-                            </div>
-                            <h4 class="vt-h4 mb-3">Secure Voting</h4>
-                            <p class="text-muted mb-0">Pessimistic database locking and strict session identity validation ensure one person, one vote.</p>
-                        </div>
-                    </x-card>
-                </div>
-                <div class="col-md-4">
-                    <x-card class="h-100 border-0 shadow-sm hover-lift transition-all">
-                        <div class="card-body p-4">
-                            <div class="feature-icon-wrapper">
-                                <i data-lucide="layout-dashboard" style="width: 32px; height: 32px;"></i>
-                            </div>
-                            <h4 class="vt-h4 mb-3">Host Management</h4>
-                            <p class="text-muted mb-0">Easily curate your rooms, manage songs, and toggle room status with a clean, responsive dashboard.</p>
-                        </div>
-                    </x-card>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Trust / Security Section -->
-    <section id="trust" class="py-5 border-top border-bottom">
-        <div class="container py-5 text-center">
-            <div class="row justify-content-center">
-                <div class="col-lg-7">
-                    <i data-lucide="lock" class="text-primary mb-4" style="width: 48px; height: 48px;"></i>
-                    <h2 class="vt-h2 mb-4">Trust in Every Tap</h2>
-                    <p class="lead text-muted mb-0">
-                        VoteTune is built on Enterprise-grade Laravel architecture. We never expose API secrets, we strictly enforce rate-limiting against automated abuse, and our voting logic is protected by transactional database locks.
-                    </p>
+                        <!-- Mock Live Voting -->
+                        <div class="d-flex flex-column gap-3">
+                            <!-- Track 1 -->
+                            <div class="d-flex align-items-center p-3 rounded glass-card border-primary">
+                                <img src="https://i.pravatar.cc/150?img=33" class="rounded" width="48" height="48" alt="Cover">
+                                <div class="ms-3 me-auto">
+                                    <h6 class="mb-0 text-white fw-bold">Midnight City</h6>
+                                    <span class="text-white-50 small">M83</span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-primary fw-bold fs-5">428</div>
+                                    <div class="text-primary small">votes</div>
+                                </div>
+                            </div>
+                            <!-- Track 2 -->
+                            <div class="d-flex align-items-center p-3 rounded glass-card">
+                                <img src="https://i.pravatar.cc/150?img=12" class="rounded" width="48" height="48" alt="Cover">
+                                <div class="ms-3 me-auto">
+                                    <h6 class="mb-0 text-white fw-bold">Blinding Lights</h6>
+                                    <span class="text-white-50 small">The Weeknd</span>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-white-50 fw-bold fs-5">392</div>
+                                    <div class="text-white-50 small">votes</div>
+                                </div>
+                            </div>
+                            <!-- Track 3 -->
+                            <div class="d-flex align-items-center p-3 rounded glass-card opacity-75">
+                                <div class="bg-secondary bg-opacity-25 rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
+                                    <i data-lucide="music" class="text-white-50"></i>
+                                </div>
+                                <div class="ms-3 me-auto w-50">
+                                    <div class="bg-secondary bg-opacity-25 rounded mb-2" style="height: 12px; width: 80%;"></div>
+                                    <div class="bg-secondary bg-opacity-25 rounded" style="height: 10px; width: 40%;"></div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="bg-secondary bg-opacity-25 rounded mx-auto" style="height: 20px; width: 30px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="mt-auto py-4 bg-body-tertiary border-top">
-        <div class="container text-center text-muted">
+    <footer class="py-4 bg-dark text-white-50 border-top border-secondary border-opacity-25">
+        <div class="container text-center">
             <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
-                <i data-lucide="music-4" style="width: 20px; height: 20px;" class="vt-text-primary"></i>
-                <span class="fw-bold fs-5">VoteTune</span>
+                <i data-lucide="music-4" style="width: 20px; height: 20px;" class="text-primary"></i>
+                <span class="fw-bold fs-5 text-white">VoteTune</span>
             </div>
             <p class="mb-0 small">&copy; {{ date('Y') }} VoteTune. All rights reserved.</p>
         </div>

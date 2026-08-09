@@ -10,7 +10,7 @@
 <body class="d-flex flex-column min-vh-100">
     @include('partials.navbar')
     <div class="d-flex flex-grow-1">
-        @include('partials.sidebar')
+        @include('partials.admin-sidebar')
         <main class="flex-grow-1 p-4 w-100 overflow-hidden">
             @yield('content')
         </main>

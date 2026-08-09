@@ -11,7 +11,7 @@
     @include('partials.navbar')
     
     <div class="d-flex flex-grow-1">
-        @include('partials.sidebar')
+        @include('partials.user-sidebar')
         
         <main class="flex-grow-1 p-4 bg-transparent w-100 overflow-hidden">
             @yield('content')
