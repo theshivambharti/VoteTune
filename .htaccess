@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # If the request is for something in the public directory, serve it directly
+    RewriteCond %{REQUEST_URI} ^/public/
+    RewriteRule ^(.*)$ - [L]
+
+    # Otherwise, rewrite to the public directory
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
