@@ -12,15 +12,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
             $table->foreignId('song_id')->constrained()->cascadeOnDelete();
+            
+            // Nullable for guests
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('guest_session_id')->nullable();
+            
+            // A deterministic string to uniquely identify the voter (e.g. "user_5" or "guest_xyz123")
+            // This prevents MySQL NULL index bypasses.
+            $table->string('voter_identifier');
+            
             $table->timestamps();
 
-            // Logged-in vote uniqueness
-            $table->unique(['room_id', 'song_id', 'user_id'], 'unique_user_vote');
-
-            // Guest vote uniqueness
-            $table->unique(['room_id', 'song_id', 'guest_session_id'], 'unique_guest_vote');
+            // Single unified unique index
+            $table->unique(['room_id', 'song_id', 'voter_identifier'], 'unique_room_song_voter');
         });
     }
 

@@ -28,5 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+// Public Room Routes
+Route::get('/r/{code}', [\App\Http\Controllers\RoomController::class, 'showPublic'])->name('room.show');
+Route::post('/r/{room}/song/{song}/vote', [\App\Http\Controllers\VoteController::class, 'toggleVote'])->name('room.vote');
+
 require __DIR__.'/auth.php';
 require __DIR__.'/admin/settings.php';

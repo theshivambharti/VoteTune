@@ -14,6 +14,7 @@ class Vote extends Model
         'song_id',
         'user_id',
         'guest_session_id',
+        'voter_identifier',
     ];
 
     public function room()
