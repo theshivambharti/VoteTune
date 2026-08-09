@@ -1,10 +1,22 @@
-@extends('layouts.guest')
-@section('content')
-<div class="text-center">
-    <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning rounded-circle mb-4" style="width: 80px; height: 80px;">
-        <i data-lucide="tool" style="width: 40px; height: 40px;"></i>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Service Unavailable</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8f9fa; color: #212529; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .text-center { text-align: center; padding: 2rem; }
+        .text-warning { color: #ffc107; }
+        h1 { margin-bottom: 1rem; }
+        p { color: #6c757d; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <div class="text-warning" style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">503</div>
+        <h1>Service Unavailable</h1>
+        <p>We are currently performing maintenance. Please check back soon.</p>
     </div>
-    <h1 class="vt-h2 mb-3">Under Maintenance</h1>
-    <p class="text-secondary vt-body mb-4">We are currently upgrading VoteTune to serve you better. We'll be back online shortly.</p>
-</div>
-@endsection
+</body>
+</html>

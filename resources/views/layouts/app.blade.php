@@ -19,7 +19,7 @@
     </div>
     
     @include('partials.footer')
-    @include('partials.flash-message')
+    <x-flash-message />
     @stack('scripts')
 </body>
 </html>
