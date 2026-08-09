@@ -75,7 +75,7 @@
                 <div class="mb-4 d-flex align-items-start gap-2">
                     <input class="form-check-input mt-1" type="checkbox" id="terms" required>
                     <label class="form-check-label text-muted small" for="terms">
-                        By creating an account, you agree to our <a href="#" class="text-primary text-decoration-none fw-semibold">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none fw-semibold">Privacy Policy</a>.
+                        By creating an account, you agree to our <a href="{{ url('/') }}" class="text-primary text-decoration-none fw-semibold">Terms of Service</a> and <a href="{{ url('/') }}" class="text-primary text-decoration-none fw-semibold">Privacy Policy</a>.
                     </label>
                 </div>
 

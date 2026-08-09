@@ -3,8 +3,8 @@
         <div class="d-flex justify-content-between align-items-center">
             <span class="text-secondary vt-body-small">© {{ date('Y') }} VoteTune. All rights reserved.</span>
             <div class="d-flex gap-3">
-                <a href="#" class="text-secondary text-decoration-none vt-body-small">Privacy</a>
-                <a href="#" class="text-secondary text-decoration-none vt-body-small">Terms</a>
+                <a href="{{ url('/') }}" class="text-secondary text-decoration-none vt-body-small">Privacy</a>
+                <a href="{{ url('/') }}" class="text-secondary text-decoration-none vt-body-small">Terms</a>
             </div>
         </div>
     </div>

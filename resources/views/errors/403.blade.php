@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Not Found - VoteTune</title>
+    <title>Forbidden - VoteTune</title>
     <style>
         body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { text-align: center; padding: 2rem; }
@@ -16,9 +16,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>404</h1>
-        <h2>Page Not Found</h2>
-        <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <h1>403</h1>
+        <h2>Access Denied</h2>
+        <p>You do not have permission to access this page.</p>
         <a href="/">Return Home</a>
     </div>
 </body>
