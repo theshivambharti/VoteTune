@@ -85,10 +85,11 @@ class VotingWorkflowTest extends TestCase
 
     public function test_guest_can_vote()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\EncryptCookies::class);
         $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $response = $this->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->call('POST', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
 
         $response->assertStatus(200);
         $this->assertDatabaseCount('votes', 1);
@@ -96,15 +97,16 @@ class VotingWorkflowTest extends TestCase
 
     public function test_guest_cannot_create_a_duplicate_vote()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\EncryptCookies::class);
         $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $response1 = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response1 = $this->call('POST', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
         $response1->assertStatus(200);
         
         $this->assertDatabaseCount('votes', 1);
 
-        $response2 = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response2 = $this->call('POST', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
         $response2->assertStatus(422);
         
         $this->assertDatabaseCount('votes', 1);
@@ -112,12 +114,13 @@ class VotingWorkflowTest extends TestCase
 
     public function test_guest_can_remove_their_vote()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\EncryptCookies::class);
         $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $this->call('POST', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
         
-        $response = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->deleteJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->call('DELETE', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
         $response->assertStatus(200);
         
         $this->assertDatabaseCount('votes', 0);
@@ -125,10 +128,11 @@ class VotingWorkflowTest extends TestCase
 
     public function test_closed_room_rejects_voting()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\EncryptCookies::class);
         $room = Room::factory()->create(['status' => 'closed']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $response = $this->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->call('POST', "/r/{$room->id}/song/{$song->id}/vote", [], ['voter_id' => 'guest_123']);
 
         $response->assertStatus(403);
     }

@@ -27,7 +27,7 @@ class VoteController extends Controller
             return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
         }
 
-        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : ($request->cookie('voter_id') ?? $request->header('X-Voter-Id'));
+        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
         if (!$voterIdentifier) {
             $voterIdentifier = 'guest_' . \Illuminate\Support\Str::uuid()->toString();
         }
@@ -56,7 +56,7 @@ class VoteController extends Controller
             return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
         }
 
-        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : ($request->cookie('voter_id') ?? $request->header('X-Voter-Id'));
+        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
 
         if (!$voterIdentifier) {
             return response()->json(['success' => false, 'message' => 'No vote found.'], 404);
