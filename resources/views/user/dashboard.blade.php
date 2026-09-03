@@ -47,7 +47,7 @@
                                     <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Active</span>
                                 </div>
                                 <div class="mb-4">
-                                    <span class="text-muted small">Host: {{ $room->user->name ?? 'Unknown' }}</span>
+                                    <span class="text-muted small">Host: {{ $room->host->name ?? 'Unknown' }}</span>
                                 </div>
                                 <a href="{{ route('room.show', $room->room_code) }}" class="btn vt-btn btn-sm btn-light w-100 fw-semibold">
                                     Enter Room
@@ -112,24 +112,130 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold">Join a Room</h5>
+                <h5 class="modal-title fw-bold" id="joinRoomModalLabel">Join a Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-4">
-                <div class="mb-3">
-                    <label for="room_code" class="form-label fw-semibold">Enter Room Code</label>
-                    <input type="text" class="form-control form-control-lg font-monospace text-center letter-spacing-2" id="room_code" placeholder="e.g. A1B2C3" autofocus>
+                
+                <!-- QR Scanner View (Hidden by default) -->
+                <div id="qrScannerView" class="d-none text-center">
+                    <div id="reader" style="width: 100%; border-radius: 8px; overflow: hidden; margin-bottom: 15px;"></div>
+                    <p class="text-muted small">Point your camera at a VoteTune room QR code.</p>
+                    <p id="qrError" class="text-danger small fw-bold d-none">That QR code isn't a valid VoteTune room.</p>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btnManualCode">Enter code manually</button>
                 </div>
-                <div class="text-center text-muted small mb-3">Or</div>
-                <button class="btn btn-outline-secondary w-100 fw-semibold" onclick="alert('QR Scanner feature coming soon!')">
-                    <i data-lucide="qr-code" class="me-2" style="width: 18px;"></i> Scan QR Code
-                </button>
+
+                <!-- Manual Code View -->
+                <div id="manualCodeView">
+                    <div class="mb-3">
+                        <label for="room_code" class="form-label fw-semibold">Enter Room Code</label>
+                        <input type="text" class="form-control form-control-lg font-monospace text-center letter-spacing-2" id="room_code" placeholder="e.g. A1B2C3" autofocus>
+                    </div>
+                    <div class="text-center text-muted small mb-3">Or</div>
+                    <button type="button" class="btn btn-outline-secondary w-100 fw-semibold" id="btnScanQr">
+                        <i data-lucide="qr-code" class="me-2" style="width: 18px;"></i> Scan QR Code
+                    </button>
+                </div>
+
             </div>
             <div class="modal-footer border-top-0 pt-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn vt-btn vt-btn-primary px-4" onclick="window.location.href='/r/' + document.getElementById('room_code').value.trim()">Join</button>
+                <button type="button" class="btn vt-btn vt-btn-primary px-4" id="btnJoinRoom">Join</button>
             </div>
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let html5QrcodeScanner = null;
+    const qrScannerView = document.getElementById('qrScannerView');
+    const manualCodeView = document.getElementById('manualCodeView');
+    const btnScanQr = document.getElementById('btnScanQr');
+    const btnManualCode = document.getElementById('btnManualCode');
+    const qrError = document.getElementById('qrError');
+    const roomCodeInput = document.getElementById('room_code');
+    const btnJoinRoom = document.getElementById('btnJoinRoom');
+    const modal = document.getElementById('joinRoomModal');
+
+    function stopScanner() {
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear().catch(error => {
+                console.error("Failed to clear html5QrcodeScanner. ", error);
+            });
+            html5QrcodeScanner = null;
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        qrError.classList.add('d-none');
+        
+        let code = decodedText.trim();
+        
+        // If it's a URL, extract the code part
+        try {
+            if (code.includes('/r/')) {
+                const url = new URL(code);
+                const parts = url.pathname.split('/');
+                code = parts[parts.length - 1];
+            }
+        } catch (e) {
+            // Not a URL, use as is
+        }
+
+        // Basic validation: just ensure it's alphanumeric and not too long
+        if (/^[A-Za-z0-9_-]{4,20}$/.test(code)) {
+            stopScanner();
+            roomCodeInput.value = code;
+            window.location.href = '/r/' + code;
+        } else {
+            qrError.classList.remove('d-none');
+        }
+    }
+
+    function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning.
+    }
+
+    btnScanQr.addEventListener('click', function() {
+        manualCodeView.classList.add('d-none');
+        qrScannerView.classList.remove('d-none');
+        document.getElementById('joinRoomModalLabel').innerText = 'Scan QR Code';
+        
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: {width: 250, height: 250}, aspectRatio: 1.0 },
+            /* verbose= */ false);
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    });
+
+    btnManualCode.addEventListener('click', function() {
+        stopScanner();
+        qrScannerView.classList.add('d-none');
+        manualCodeView.classList.remove('d-none');
+        qrError.classList.add('d-none');
+        document.getElementById('joinRoomModalLabel').innerText = 'Join a Room';
+    });
+
+    btnJoinRoom.addEventListener('click', function() {
+        const code = roomCodeInput.value.trim();
+        if (code) {
+            window.location.href = '/r/' + code;
+        }
+    });
+
+    // Cleanup scanner when modal is closed
+    modal.addEventListener('hidden.bs.modal', function () {
+        stopScanner();
+        qrScannerView.classList.add('d-none');
+        manualCodeView.classList.remove('d-none');
+        qrError.classList.add('d-none');
+        roomCodeInput.value = '';
+        document.getElementById('joinRoomModalLabel').innerText = 'Join a Room';
+    });
+});
+</script>
+@endpush
 @endsection

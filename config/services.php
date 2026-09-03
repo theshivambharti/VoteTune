@@ -52,4 +52,8 @@ return [
         'private_key' => env('APPLE_PRIVATE_KEY'),
     ],
 
+    'youtube' => [
+        'api_key' => env('YOUTUBE_API_KEY'),
+    ],
+
 ];

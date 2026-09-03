@@ -23,7 +23,7 @@
                         <td>{{ $room->id }}</td>
                         <td class="fw-bold">{{ $room->name }}</td>
                         <td><span class="badge bg-secondary font-monospace">{{ $room->room_code }}</span></td>
-                        <td>{{ $room->user->name ?? 'Unknown' }}</td>
+                        <td>{{ $room->host->name ?? 'Unknown' }}</td>
                         <td>
                             @if($room->status === 'active')
                                 <span class="badge bg-success">Active</span>

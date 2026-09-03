@@ -12,7 +12,15 @@ class SocialAuthenticationService extends BaseService
 {
     public function redirect(string $provider)
     {
-        return Socialite::driver($provider)->redirect();
+        if (empty(config("services.{$provider}.client_id")) || empty(config("services.{$provider}.client_secret"))) {
+            return redirect()->route('login')->with('error', ucfirst($provider) . ' login is not configured yet. Please configure it in .env.');
+        }
+
+        try {
+            return Socialite::driver($provider)->redirect();
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', 'Unable to initiate ' . ucfirst($provider) . ' login: ' . $e->getMessage());
+        }
     }
 
     public function callback(string $provider): User

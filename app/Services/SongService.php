@@ -19,8 +19,8 @@ class SongService
             throw new Exception('Song already exists in this room.');
         }
 
-        $apiKey = env('YOUTUBE_API_KEY');
-        if (!$apiKey) {
+        $apiKey = config('services.youtube.api_key');
+        if (empty($apiKey)) {
             throw new Exception('YouTube API key is not configured.');
         }
 

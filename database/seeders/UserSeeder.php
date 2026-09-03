@@ -46,34 +46,34 @@ class UserSeeder extends Seeder
         $user->assignRole('User');
 
         if (app()->environment(['local', 'testing', 'development'])) {
-            $localUser = \App\Models\User::firstOrCreate(
+            $localUser = \App\Models\User::updateOrCreate(
                 ['email' => 'test.user@votetune.local'],
                 [
                     'name' => 'Local User',
                     'display_name' => 'Local Test User',
-                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@User2026!'),
+                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@123'),
                     'email_verified_at' => now(),
                 ]
             );
             $localUser->assignRole('User');
 
-            $localHost = \App\Models\User::firstOrCreate(
+            $localHost = \App\Models\User::updateOrCreate(
                 ['email' => 'test.host@votetune.local'],
                 [
                     'name' => 'Local Host',
                     'display_name' => 'Local Test Host',
-                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@Host2026!'),
+                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@123'),
                     'email_verified_at' => now(),
                 ]
             );
             $localHost->assignRole('Host');
 
-            $localAdmin = \App\Models\User::firstOrCreate(
+            $localAdmin = \App\Models\User::updateOrCreate(
                 ['email' => 'test.admin@votetune.local'],
                 [
                     'name' => 'Local Admin',
                     'display_name' => 'Local Test Admin',
-                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@Admin2026!'),
+                    'password' => \Illuminate\Support\Facades\Hash::make('VoteTune@123'),
                     'email_verified_at' => now(),
                 ]
             );

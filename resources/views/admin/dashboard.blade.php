@@ -57,7 +57,7 @@
                                 <tr>
                                     <td class="fw-medium">{{ $room->name }}</td>
                                     <td><span class="badge bg-secondary font-monospace fs-6">{{ $room->room_code }}</span></td>
-                                    <td>{{ $room->user->name ?? 'Unknown' }}</td>
+                                    <td>{{ $room->host->name ?? 'Unknown' }}</td>
                                     <td>
                                         @if($room->status === 'active')
                                             <span class="badge bg-success">Active</span>

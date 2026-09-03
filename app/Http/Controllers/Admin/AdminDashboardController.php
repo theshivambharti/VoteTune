@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
             'votes' => Vote::count(),
         ];
 
-        $recentRooms = Room::with('user')->orderBy('created_at', 'desc')->take(5)->get();
+        $recentRooms = Room::with('host')->orderBy('created_at', 'desc')->take(5)->get();
 
         return view('admin.dashboard', compact('stats', 'recentRooms'));
     }
