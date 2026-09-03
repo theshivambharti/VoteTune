@@ -7,6 +7,7 @@ use App\Models\Song;
 use App\Services\VoteService;
 use App\Http\Requests\StoreVoteRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class VoteController extends Controller
 {
@@ -26,8 +27,7 @@ class VoteController extends Controller
             return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
         }
 
-        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
-        
+        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : ($request->cookie('voter_id') ?? $request->header('X-Voter-Id'));
         if (!$voterIdentifier) {
             $voterIdentifier = 'guest_' . \Illuminate\Support\Str::uuid()->toString();
         }
@@ -56,7 +56,7 @@ class VoteController extends Controller
             return response()->json(['success' => false, 'message' => 'Room is closed.'], 403);
         }
 
-        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : $request->cookie('voter_id');
+        $voterIdentifier = Auth::check() ? 'user_' . Auth::id() : ($request->cookie('voter_id') ?? $request->header('X-Voter-Id'));
 
         if (!$voterIdentifier) {
             return response()->json(['success' => false, 'message' => 'No vote found.'], 404);

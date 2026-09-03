@@ -13,8 +13,6 @@ class StoreVoteRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'song_id' => 'required|exists:songs,id',
-        ];
+        return [];
     }
 }

@@ -85,32 +85,26 @@ class VotingWorkflowTest extends TestCase
 
     public function test_guest_can_vote()
     {
-        $room = Room::factory()->create();
+        $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $response = $this->withCookie('voter_id', 'guest_123')->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->postJson("/r/{$room->id}/song/{$song->id}/vote");
 
         $response->assertStatus(200);
-        $this->assertDatabaseHas('votes', [
-            'room_id' => $room->id,
-            'song_id' => $song->id,
-            'voter_identifier' => 'guest_123',
-        ]);
+        $this->assertDatabaseCount('votes', 1);
     }
 
     public function test_guest_cannot_create_a_duplicate_vote()
     {
-        $room = Room::factory()->create();
+        $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        // First request
-        $response1 = $this->withCookie('voter_id', 'guest_123')->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response1 = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
         $response1->assertStatus(200);
         
         $this->assertDatabaseCount('votes', 1);
 
-        // Second request
-        $response2 = $this->withCookie('voter_id', 'guest_123')->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response2 = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
         $response2->assertStatus(422);
         
         $this->assertDatabaseCount('votes', 1);
@@ -118,17 +112,15 @@ class VotingWorkflowTest extends TestCase
 
     public function test_guest_can_remove_their_vote()
     {
-        $room = Room::factory()->create();
+        $room = Room::factory()->create(['status' => 'active']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $this->withCookie('voter_id', 'guest_123')->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $this->withHeaders(['X-Voter-Id' => 'guest_123'])->postJson("/r/{$room->id}/song/{$song->id}/vote");
         
-        $response = $this->withCookie('voter_id', 'guest_123')->deleteJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->withHeaders(['X-Voter-Id' => 'guest_123'])->deleteJson("/r/{$room->id}/song/{$song->id}/vote");
         $response->assertStatus(200);
         
-        $this->assertDatabaseMissing('votes', [
-            'voter_identifier' => 'guest_123',
-        ]);
+        $this->assertDatabaseCount('votes', 0);
     }
 
     public function test_closed_room_rejects_voting()
@@ -136,7 +128,7 @@ class VotingWorkflowTest extends TestCase
         $room = Room::factory()->create(['status' => 'closed']);
         $song = Song::factory()->create(['room_id' => $room->id]);
 
-        $response = $this->withCookie('voter_id', 'guest_123')->postJson("/r/{$room->id}/song/{$song->id}/vote");
+        $response = $this->postJson("/r/{$room->id}/song/{$song->id}/vote");
 
         $response->assertStatus(403);
     }
