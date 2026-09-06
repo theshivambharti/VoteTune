@@ -8,7 +8,7 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $rooms = Room::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        $rooms = Room::with('host')->orderBy('created_at', 'desc')->paginate(15);
         return view('admin.rooms', compact('rooms'));
     }
 }

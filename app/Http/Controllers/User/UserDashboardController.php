@@ -24,6 +24,7 @@ class UserDashboardController extends Controller
         
         $recentRooms = Room::whereIn('id', $recentRoomIds)
                            ->where('status', 'active')
+                           ->with('host')
                            ->get();
                            
         $stats = [
